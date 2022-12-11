@@ -227,3 +227,27 @@ end
              [[Card(:♣, 1)]] [Card[]] [[Card(:♣, 1)]]]
     @test !is_joker_free(game)
 end
+
+@safetestset "play_round!" begin
+    using JokerJailBreak
+    using JokerJailBreak: play_round!
+    using Test
+
+    include("player_functions.jl")
+    
+    game = Game()
+    game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
+             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+
+    player = Player()
+    game.top_cards .= get_top_card.(game.board)
+    game.card_counts .= length.(game.board)
+    deck_size = length(game.deck)
+    stop,indices = decide(player, game.top_cards, game.card_counts, deck_size)
+    
+    @test stop == false 
+    @test !isempty(indices)
+
+    @test !play_round!(game, player)
+end

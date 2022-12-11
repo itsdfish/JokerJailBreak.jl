@@ -2,6 +2,10 @@ abstract type AbstractGame end
 
 abstract type AbstractPlayer end
 
+mutable struct Data 
+    n_rounds::Int
+    outcome::Symbol
+end
 struct Card 
     suit::Symbol 
     rank::Int 
@@ -33,3 +37,4 @@ function Game()
     combos = map(i -> combinations(1:9, i), 2:9)
     return Game(deck, board, card_counts, top_cards, combos)
 end
+
