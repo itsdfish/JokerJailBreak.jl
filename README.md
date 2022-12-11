@@ -84,4 +84,4 @@ The last steop is to simulate the game with `simulate!`. The default data object
 game = Game()
 player = Player()
 simulate!(game, player)
-```
+``` 
