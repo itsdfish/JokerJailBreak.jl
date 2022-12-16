@@ -27,7 +27,7 @@ using SafeTestsets
 
     game = Game()
     indices = Int[]
-    push!(game.board[5], splice!(game.deck, 1:2)...)
+    push!(game.board[5], splice!(game.deck, 1:3)...)
     @test !is_valid(game, indices)
 
     game = Game()

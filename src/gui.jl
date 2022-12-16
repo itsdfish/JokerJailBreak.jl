@@ -30,10 +30,6 @@ function show_hand(player)
     println("hand: " * str)
 end
 
-function print_exchange(p1, p2, cards)
-    println("$(p1.id) gives $(p2.id) $(show_cards(cards))")
-end
-
 function show_cards(cards)
     return mapreduce(c -> string(c) * "  ", *, cards)
 end
@@ -41,13 +37,4 @@ end
 function wait_for_key()
     println("Press enter to continue.")
     readline()
-end
-
-function print_inquiry(game, player::Human, opponent, value)
-    # intentionally blank
-end
-
-function print_inquiry(game, p1, p2, value)
-    new_value = game.num_2_str[value]
-    println("$(p1.id) asks $(p2.id) for a $new_value")
 end

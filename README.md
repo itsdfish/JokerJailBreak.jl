@@ -1,6 +1,13 @@
 # JokerJailBreak
 
-Joker jail break is a simple card matching game developed by Ramon Huiskamp. Joker is placed the center of a 3 X 3 matrix of card piles which serves as a jail cell. Cards are removed by selecting cards such that the sum of the black and sum of the red cards are equal. Joker can breakout once either the top, bottom, left or right pile is depleted. Joker cannot escape from the corners, but they can be used strategically to produce equal sums. Up to two cards can be placed on the joker if there is no move, but those cards must ultimately be removed. The game ends when Joker is free, or no moves are possible. An online version of Joker jail break can be found here: (https://wcordewiner.github.io/joker-jailbreak/)
+The purpose of this package is to simulate and play the game Joker Jail Break. Basic documentation for using the package is provided below.
+
+# Rules 
+Joker jail break is a simple card matching game developed by Ramon Huiskamp. The goal is to remove the Joker from the jail cell. As shown below, the Joker is placed the center of a 3 X 3 matrix of card piles which serves as a jail cell. The corners have 3 cards and the other piles have 7 cards. The Joker can breakout once either the top, bottom, left or right pile is depleted. Joker cannot escape from the corners, but cards in those piles can be used strategically.  
+
+<center><img src="resources/game.png"></center>
+
+Cards are removed by selecting cards such that the sum of the black and sum of the red cards are equal. In some situations, a valid card selection does not exist. A card from the remaining deck can be placed on the Joker in an attempt to resolve the impasse. However, cards placed on the Joker must ultimately be removed, and a maximum of three cards can be placed on the Joker at any time. The game ends when Joker is free, or no moves are possible. An online version of Joker jail break can be found here: (https://wcordewiner.github.io/joker-jailbreak/)
 
 # API
 
@@ -10,12 +17,13 @@ At minimum, the API requires one to define a subtype of `AbstractPlayer`, and a 
 struct Player <: AbstractPlayer
     # optional fields
 end
-
-The following shows the outline of the `decide` method, which returns two variables: `stop` which indicates whether the player stops the game, and `indices` which are the indices of the selected cards.
+```
+Note that fields can be added as needed. The following code block shows the outline of the `decide` method, which returns two variables: `stop` which indicates whether the player stops the game, and `indices` which are the indices of the selected cards.
 
 ```julia
 function decide(player::Player, board, card_counts, deck_size; kwargs...)
     # intentionally blank
+    return stop,indices
 end
 ```
 
@@ -26,6 +34,7 @@ Three other methods in API can be optionally defined. `setup` allows you to conf
 ```julia
 function setup!(player::Player, board, card_counts; kwargs...)
     # intentionally blank
+    return nothing
 end
 ```
 
@@ -34,12 +43,14 @@ By default, only the number of rounds and the outcome of the game are collected.
 ```julia
 function update_data_round!(game, player, data::MyData, stop; kwargs...)
 
+    return nothing
 end
 ```
 
 ```julia
 function update_data_end!(game, player, data:MyData, stop; kwargs...)
 
+    return nothing
 end
 ```
 
@@ -51,6 +62,7 @@ The following example illustrates how to develop a simple player. The first step
 using JokerJailBreak
 import JokerJailBreak: AbstractPlayer, decide
 using StatsBase
+using Random
 ```
 
 
@@ -64,6 +76,7 @@ end
 
 Now that we have defined our own subtype of `AbstractPlayer`, we can define the player's decision logic.
 The player will select random pairs of cards until a match is found (e.g., 5 black, 5 red), or 1000 attemps have been made. If no matches are found, the player stops the game. The function `decide` will return two variables: `stop` which indicates whether the player stops the game, and `indices` which are the indices of the selected cards. The function `sample` from the package `StatsBase` will be used to sample pairs of card indices without replacement. 
+
 ```julia
 function decide(player::Player, board, card_counts, deck_size)
     indices = Int[]
@@ -71,6 +84,7 @@ function decide(player::Player, board, card_counts, deck_size)
     while cnt < 1000 
         cnt += 1
         indices = sample(1:9, 2, replace=false)
+        any(i -> board[i] == nothing, indices) ? continue : nothing
         is_zero_sum(board, indices) ? break : nothing
     end
     stop = cnt < 1000 ? false : true 
@@ -85,3 +99,19 @@ game = Game()
 player = Player()
 simulate!(game, player)
 ``` 
+
+One question you might want to answer is how often does this strategy solve the game? Let's wrap the code block above in a function.
+```julia
+function wrapper(;kwargs...)
+    game = Game()
+    player = Player()
+    return simulate!(game, player; kwargs...)
+end
+```
+Now, let's set the seed of the random number generator and repeat the simulation 1,000 times.
+```julia
+Random.seed!(210)
+data = map(x -> wrapper(), 1:1000)
+mean(x -> x.outcome == :win, data)
+```
+As expected, the win probability is low: `0.002`. 

@@ -12,6 +12,7 @@ function decide(player::Player, board, card_counts, deck_size)
     while cnt < 1000 
         cnt += 1
         indices = sample(1:9, 2, replace=false)
+        any(i -> board[i] == nothing, indices) ? continue : nothing
         is_zero_sum(board, indices) ? break : nothing
     end
     stop = cnt < 1000 ? false : true 

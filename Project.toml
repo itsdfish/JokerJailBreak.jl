@@ -1,6 +1,6 @@
 name = "JokerJailBreak"
 uuid = "58f162c1-cbb9-45ca-87ec-ee33e09b9a4e"
-authors = ["itsdfish <itsdfish@gmail.com> and contributors"]
+authors = ["itsdfish"]
 version = "0.1.0"
 
 [deps]

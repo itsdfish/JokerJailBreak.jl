@@ -31,7 +31,7 @@ Simulate a single game of Joker Jail Break and return data.
 - `kwargs...`: optional keyword arguments passed to `decide`, `setup!`, `update_data_round!`, and `update_data_end!`
 """
 function simulate!(game, player, data; kwargs...)
-    setup!(player, game.board, game.card_counts; kwargs...)
+    (player, game.board, game.card_counts)
     stop = false
     status = :in_progress
     while !stop && status == :in_progress
@@ -43,6 +43,21 @@ function simulate!(game, player, data; kwargs...)
     return data
 end
 
+"""
+    play_round!(game, player; kwargs...)
+
+Play one round which involves making a decision and updating the card piles. 
+
+# Arguments
+
+- `game`:
+- `player`:
+
+# Keywords
+
+- `kwargs...`: optional keyword arguments passed to `setup!`, `decide`, `update_data_round!`, and 
+`update_data_end!`
+"""
 function play_round!(game, player; kwargs...)
     game.top_cards .= get_top_card.(game.board)
     game.card_counts .= length.(game.board)
@@ -76,7 +91,7 @@ end
 
 function can_add_to_joker(game)
     return (length(game.board[2,2]) ≥ 1) && 
-        (length(game.board[2,2]) < 3) && !isempty(game.deck)
+        (length(game.board[2,2]) < 4) && !isempty(game.deck)
 end
 
 function is_zero_sum(game::AbstractGame, indices)
@@ -142,7 +157,7 @@ end
 function is_winnable(game, combos)
     for c ∈ combos
         any_depleted(game.card_counts, c) ? continue : nothing
-        (game.card_counts[5] == 1) && (5 ∈ c) ? (continue) : nothing
+        (game.card_counts[5] == 1) && (5 ∈ c) ? continue : nothing
         sum(game.board, c) == 0 ? (return true) : nothing
     end
     return false 
@@ -185,6 +200,17 @@ function sum(board, indices)
     return v 
 end
 
+"""
+    sum(board::Matrix{Union{Nothing, Card}}, indices)
+
+Returns the sum of cards on the board corresponding to  `indices`.
+
+# Arguments
+
+- `indices`: a vector of indices i ∈ [1:9] or `CartesianIndex`
+- `board`: a 3 X 3 matrix representing a wall around the Joker, who is located in the center. Each element 
+is an up turned card 
+"""
 function sum(board::Matrix{Union{Nothing, Card}}, indices)
     v = 0
     for i ∈ indices
@@ -198,6 +224,15 @@ function sum(board::Matrix{Union{Nothing, Card}}, indices)
     return v 
 end
 
+"""
+    get_color(card)
+
+Returns the color of the card. 
+
+# Arguments
+
+- `card`: a card object with a suit and rank 
+"""
 function get_color(card)
     if card.suit ∈ [:♥, :♦]
         return :red
@@ -207,6 +242,18 @@ end
 
 update!(game, indices) = update!(game.board, game.deck, indices)
 
+"""
+    update!(board, deck, indices)
+
+Remove top card from selected piles.
+
+# Arguments
+
+- `board`: a 3 X 3 matrix representing a wall around the Joker, who is located in the center. Each element 
+is an up turned card 
+- `deck`: vector of cards not used yet
+- `indices`: a vector of indices i ∈ [1:9] or `CartesianIndex`
+"""
 function update!(board, deck, indices)
     if isempty(indices)
         push!(board[5], pop!(deck))
