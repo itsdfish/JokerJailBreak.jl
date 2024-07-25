@@ -9,7 +9,7 @@ using SafeTestsets
     indices = [5]
     @test !is_valid(game, indices)
 
-    indices = [CartesianIndex(2,2)]
+    indices = [CartesianIndex(2, 2)]
     @test !is_valid(game, indices)
 
     game = Game()
@@ -34,22 +34,22 @@ using SafeTestsets
     indices = Int[]
     @test is_valid(game, indices)
 
-    indices = [1,2,3,4,6,7,8,9]
+    indices = [1, 2, 3, 4, 6, 7, 8, 9]
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test is_valid(game, indices)
 
-    indices = [1,9]
+    indices = [1, 9]
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test is_valid(game, indices)
 
-    indices = [1,2]
+    indices = [1, 2]
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test !is_valid(game, indices)
 end
 
@@ -60,16 +60,16 @@ end
 
     game = Game()
 
-    indices = [1,2]
+    indices = [1, 2]
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test sum(game.board, indices) == -2
 
-    indices = [1,9]
+    indices = [1, 9]
     @test sum(game.board, indices) == 0
 
-    indices = [CartesianIndex(1,1),CartesianIndex(3,3)]
+    indices = [CartesianIndex(1, 1), CartesianIndex(3, 3)]
     @test sum(game.board, indices) == 0
 end
 
@@ -80,17 +80,17 @@ end
 
     game = Game()
 
-    initial_board = [[[Card(:♥, 1),Card(:♥, 3)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                    [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                    [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1),Card(:♥, 3)]]]
+    initial_board = [[[Card(:♥, 1), Card(:♥, 3)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1), Card(:♥, 3)]]]
 
     ground_truth = [[[Card(:♥, 3)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                    [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                    [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♥, 3)]]]
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♥, 3)]]]
 
     game.board = deepcopy(initial_board)
 
-    indices = [1,9]
+    indices = [1, 9]
 
     update!(game, indices)
 
@@ -104,16 +104,16 @@ end
 
     game = Game()
 
-    indices = [1,2]
+    indices = [1, 2]
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test sum(game.board, indices) == -2
 
-    indices = [1,9]
+    indices = [1, 9]
     @test sum(game.board, indices) == 0
 
-    indices = [CartesianIndex(1,1),CartesianIndex(3,3)]
+    indices = [CartesianIndex(1, 1), CartesianIndex(3, 3)]
     @test sum(game.board, indices) == 0
 end
 
@@ -125,16 +125,16 @@ end
     game = Game()
 
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                 [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-                 [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
 
     combos = game.combos[1]
     @test is_winnable(game, combos)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     combos = game.combos[2]
     @test !is_winnable(game, combos)
 
@@ -145,18 +145,18 @@ end
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
-    map(i -> empty!(game.board[i]), [1,2,3,4,6,7,8])
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+    map(i -> empty!(game.board[i]), [1, 2, 3, 4, 6, 7, 8])
     combos = game.combos[1]
     game.card_counts .= length.(game.board)
     @test !is_winnable(game, combos)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                [[Card(:♥, 1)]] [[Card(:♥, 1),Card(:joker, 0)]] [[Card(:♣, 1)]];
-                [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
-    map(i -> empty!(game.board[i]), [1,2,3,4,6,7,8])
+        [[Card(:♥, 1)]] [[Card(:♥, 1), Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+    map(i -> empty!(game.board[i]), [1, 2, 3, 4, 6, 7, 8])
     game.card_counts .= length.(game.board)
     combos = game.combos[1]
     @test is_winnable(game, combos)
@@ -169,62 +169,61 @@ end
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
-
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
 
     game = Game()
     game.board = [[Card[]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-                 [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-                 [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test !is_joker_free(game)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [Card[]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test !is_joker_free(game)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [Card[]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [Card[]]]
     @test !is_joker_free(game)
-   
+
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [Card[]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [Card[]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test !is_joker_free(game)
-   
+
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [Card[]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [Card[]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test is_joker_free(game)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [Card[]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test is_joker_free(game)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [Card[]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [Card[]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
     @test is_joker_free(game)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [Card[]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [Card[]] [[Card(:♣, 1)]]]
     @test is_joker_free(game)
 
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:♣, 1),Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [Card[]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:♣, 1), Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [Card[]] [[Card(:♣, 1)]]]
     @test !is_joker_free(game)
 end
 
@@ -234,19 +233,19 @@ end
     using Test
 
     include("player_functions.jl")
-    
+
     game = Game()
     game.board = [[[Card(:♥, 1)]] [[Card(:♥, 1)]] [[Card(:♥, 1)]];
-             [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
-             [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
+        [[Card(:♥, 1)]] [[Card(:joker, 0)]] [[Card(:♣, 1)]];
+        [[Card(:♣, 1)]] [[Card(:♣, 1)]] [[Card(:♣, 1)]]]
 
     player = Player()
     game.top_cards .= get_top_card.(game.board)
     game.card_counts .= length.(game.board)
     deck_size = length(game.deck)
-    stop,indices = decide(player, game.top_cards, game.card_counts, deck_size)
-    
-    @test stop == false 
+    stop, indices = decide(player, game.top_cards, game.card_counts, deck_size)
+
+    @test stop == false
     @test !isempty(indices)
 
     @test !play_round!(game, player)

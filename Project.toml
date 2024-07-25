@@ -10,6 +10,7 @@ SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 
 [compat]
 Combinatorics = "1.0.0"
+Random = "1"
 SafeTestsets = "0.0.1, 0.1"
 StatsBase = "0.33.0"
 julia = "1"

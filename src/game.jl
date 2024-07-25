@@ -62,36 +62,36 @@ function play_round!(game, player; kwargs...)
     game.top_cards .= get_top_card.(game.board)
     game.card_counts .= length.(game.board)
     deck_size = length(game.deck)
-    stop,indices = decide(player, game.top_cards, game.card_counts, deck_size; kwargs...)
+    stop, indices = decide(player, game.top_cards, game.card_counts, deck_size; kwargs...)
     stop ? (return true) : nothing
     is_valid(game, indices) ? nothing : error("not a valid selection")
     update!(game, indices)
-    return stop 
+    return stop
 end
 
 function is_valid(game, indices)
-    if isempty(indices) 
+    if isempty(indices)
         return can_add_to_joker(game)
     elseif !is_zero_sum(game, indices)
-        return false 
+        return false
     end
     return can_select(game, indices)
-end 
+end
 
 function can_select(game, indices)
-    for i ∈ indices 
+    for i ∈ indices
         if isempty(game.board[i])
             return false
-        elseif (i == CartesianIndex(2,2)) || (i == 5)
-            length(game.board[i]) == 1 ? (return false) : nothing 
+        elseif (i == CartesianIndex(2, 2)) || (i == 5)
+            length(game.board[i]) == 1 ? (return false) : nothing
         end
     end
     return true
 end
 
 function can_add_to_joker(game)
-    return (length(game.board[2,2]) ≥ 1) && 
-        (length(game.board[2,2]) < 4) && !isempty(game.deck)
+    return (length(game.board[2, 2]) ≥ 1) &&
+           (length(game.board[2, 2]) < 4) && !isempty(game.deck)
 end
 
 function is_zero_sum(game::AbstractGame, indices)
@@ -115,7 +115,7 @@ end
 
 function get_status(game)
     is_joker_free(game) ? (return :win) : nothing
-    is_winnable(game) ? (return :in_progress) : nothing 
+    is_winnable(game) ? (return :in_progress) : nothing
     return :not_winnable
 end
 
@@ -134,13 +134,13 @@ is an up turned card
 function is_joker_free(board)
     if length(board[5]) > 1
         return false
-    elseif isempty(board[1,2])
-        return true 
-    elseif isempty(board[2,1])
+    elseif isempty(board[1, 2])
         return true
-    elseif isempty(board[2,3])
+    elseif isempty(board[2, 1])
         return true
-    elseif isempty(board[3,2])
+    elseif isempty(board[2, 3])
+        return true
+    elseif isempty(board[3, 2])
         return true
     end
     return false
@@ -149,7 +149,7 @@ end
 function is_winnable(game)
     can_add_to_joker(game) ? (return true) : (return false)
     for c ∈ game.combos
-        is_winable(game, c) ? (return true) : nothing 
+        is_winable(game, c) ? (return true) : nothing
     end
     return false
 end
@@ -160,7 +160,7 @@ function is_winnable(game, combos)
         (game.card_counts[5] == 1) && (5 ∈ c) ? continue : nothing
         sum(game.board, c) == 0 ? (return true) : nothing
     end
-    return false 
+    return false
 end
 
 """
@@ -183,21 +183,21 @@ end
 
 function make_deck()
     suits = [:♥, :♦, :♣, :♠]
-    deck =  [Card(s, v) for s ∈ suits for v ∈ 1:13]
-    return deck 
+    deck = [Card(s, v) for s ∈ suits for v ∈ 1:13]
+    return deck
 end
 
 function sum(board, indices)
     v = 0
     for i ∈ indices
         c = board[i][1]
-        if get_color(c) == :black 
+        if get_color(c) == :black
             v += c.rank
         else
-            v -= c.rank 
+            v -= c.rank
         end
     end
-    return v 
+    return v
 end
 
 """
@@ -215,13 +215,13 @@ function sum(board::Matrix{Union{Nothing, Card}}, indices)
     v = 0
     for i ∈ indices
         c = board[i]
-        if get_color(c) == :black 
+        if get_color(c) == :black
             v += c.rank
         else
-            v -= c.rank 
+            v -= c.rank
         end
     end
-    return v 
+    return v
 end
 
 """
@@ -237,7 +237,7 @@ function get_color(card)
     if card.suit ∈ [:♥, :♦]
         return :red
     end
-    return :black 
+    return :black
 end
 
 update!(game, indices) = update!(game.board, game.deck, indices)
@@ -258,7 +258,7 @@ function update!(board, deck, indices)
     if isempty(indices)
         push!(board[5], pop!(deck))
     else
-        for i ∈ indices 
+        for i ∈ indices
             popfirst!(board[i])
         end
     end
@@ -331,7 +331,7 @@ Updates data after each round. By default, the round counter is incremented.
 """
 function update_data_round!(game, player, data, stop; kwargs...)
     data.n_rounds += 1
-    return nothing 
+    return nothing
 end
 
 """
@@ -351,5 +351,5 @@ Updates data object after the game has been completed.
 """
 function update_data_end!(game, player, data, stop; kwargs...)
     data.outcome = get_status(game)
-    return nothing 
+    return nothing
 end
