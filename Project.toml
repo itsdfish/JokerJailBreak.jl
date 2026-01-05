@@ -1,7 +1,7 @@
 name = "JokerJailBreak"
 uuid = "58f162c1-cbb9-45ca-87ec-ee33e09b9a4e"
-authors = ["itsdfish"]
 version = "0.1.0"
+authors = ["itsdfish"]
 
 [deps]
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
@@ -12,7 +12,7 @@ SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 Combinatorics = "1.0.0"
 Random = "1"
 SafeTestsets = "0.0.1, 0.1"
-StatsBase = "0.33.0"
+StatsBase = "0.33.0, 0.34"
 julia = "1"
 
 [extras]
